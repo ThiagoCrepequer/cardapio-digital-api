@@ -15,16 +15,34 @@ public class FoodController {
     @Autowired
     private FoodRepository repository;
 
-    @PostMapping
-    public void salveFood(@RequestBody FoodResquestDTO data) {
-        Food foodData = new Food(data);
-        repository.save(foodData);
-        return;
-    }
-
     @GetMapping
     public List<FoodResponseDTO> getAll() {
-        List<FoodResponseDTO> foodList = repository.findAll().stream().map(FoodResponseDTO::new).toList();
+        List<FoodResponseDTO> foodList = repository
+                .findAll()
+                .stream()
+                .map(FoodResponseDTO::new)
+                .toList();
+
         return foodList;
+    }
+
+
+    @PostMapping
+    public Food salveFood(@RequestBody FoodResquestDTO data) {
+        Food foodData = new Food(data);
+        repository.save(foodData);
+        return foodData;
+    }
+
+    @PutMapping("/{id}")
+    public Food updateFood(@PathVariable Long id, @RequestBody FoodResquestDTO data) {
+        Food foodData = repository.findById(id).orElseThrow();
+        // TODO: melhorar a forma de atualizar
+        foodData.setTitle(data.title());
+        foodData.setImage(data.image());
+        foodData.setPrice(data.price());
+        repository.save(foodData);
+
+        return foodData;
     }
 }
