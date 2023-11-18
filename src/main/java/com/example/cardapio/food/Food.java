@@ -19,4 +19,10 @@ public class Food {
     private String title;
     private String image;
     private Integer price;
+
+    public Food(FoodResquestDTO data) {
+        this.title = data.title();
+        this.image = data.image();
+        this.price = data.price();
+    }
 }
