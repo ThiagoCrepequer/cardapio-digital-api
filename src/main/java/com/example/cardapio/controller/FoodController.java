@@ -51,4 +51,10 @@ public class FoodController {
         repository.deleteById(id);
         return;
     }
+
+    @GetMapping("/{id}")
+    public FoodResponseDTO getFood(@PathVariable Long id) {
+        Food food = repository.findById(id).orElseThrow();
+        return new FoodResponseDTO(food);
+    }
 }
