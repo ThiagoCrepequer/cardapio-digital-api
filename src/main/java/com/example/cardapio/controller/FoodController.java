@@ -45,4 +45,10 @@ public class FoodController {
 
         return foodData;
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteFood(@PathVariable Long id) {
+        repository.deleteById(id);
+        return;
+    }
 }
