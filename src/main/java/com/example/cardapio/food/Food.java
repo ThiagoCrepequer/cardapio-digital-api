@@ -18,7 +18,7 @@ public class Food {
     private String image;
     private Integer price;
 
-    public Food(FoodResquestDTO data) {
+    public Food(FoodResponseDTO data) {
         this.title = data.title();
         this.image = data.image();
         this.price = data.price();

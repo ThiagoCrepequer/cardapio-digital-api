@@ -3,7 +3,6 @@ package com.example.cardapio.controller;
 import com.example.cardapio.food.Food;
 import com.example.cardapio.food.FoodRepository;
 import com.example.cardapio.food.FoodResponseDTO;
-import com.example.cardapio.food.FoodResquestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +27,14 @@ public class FoodController {
 
 
     @PostMapping
-    public Food salveFood(@RequestBody FoodResquestDTO data) {
+    public Food salveFood(@RequestBody FoodResponseDTO data) {
         Food foodData = new Food(data);
         repository.save(foodData);
         return foodData;
     }
 
     @PutMapping("/{id}")
-    public Food updateFood(@PathVariable Long id, @RequestBody FoodResquestDTO data) {
+    public Food updateFood(@PathVariable Long id, @RequestBody FoodResponseDTO data) {
         Food foodData = repository.findById(id).orElseThrow();
         // TODO: melhorar a forma de atualizar
         foodData.setTitle(data.title());
@@ -49,7 +48,6 @@ public class FoodController {
     @DeleteMapping("/{id}")
     public void deleteFood(@PathVariable Long id) {
         repository.deleteById(id);
-        return;
     }
 
     @GetMapping("/{id}")
