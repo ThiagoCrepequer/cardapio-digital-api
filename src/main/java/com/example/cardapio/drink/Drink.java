@@ -17,6 +17,7 @@ public class Drink {
     private String title;
     private String size;
     private String image;
+    private int discountPercentage;
     private int price;
 
     public Drink(DrinkResponseDTO data) {
@@ -27,6 +28,7 @@ public class Drink {
         this.title = data.title();
         this.size = data.size();
         this.image = data.image();
+        this.discountPercentage = data.discountPercentage();
         this.price = data.price();
     }
 }
