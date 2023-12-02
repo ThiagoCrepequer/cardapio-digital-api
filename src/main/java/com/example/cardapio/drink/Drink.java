@@ -20,6 +20,10 @@ public class Drink {
     private int price;
 
     public Drink(DrinkResponseDTO data) {
+        setData(data);
+    }
+
+    public void setData(DrinkResponseDTO data) {
         this.title = data.title();
         this.size = data.size();
         this.image = data.image();

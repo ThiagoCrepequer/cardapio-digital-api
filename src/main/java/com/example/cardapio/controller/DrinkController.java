@@ -16,13 +16,17 @@ public class DrinkController {
 
     @GetMapping
     public List<DrinkResponseDTO> getAll() {
-        List<DrinkResponseDTO> drinkList =  repository
+        return repository
                 .findAll()
                 .stream()
                 .map(DrinkResponseDTO::new)
                 .toList();
+    }
 
-        return drinkList;
+    @GetMapping("/{id}")
+    public DrinkResponseDTO getDrink(@PathVariable Long id) {
+        Drink drink = repository.findById(id).orElseThrow();
+        return new DrinkResponseDTO(drink);
     }
 
     @PostMapping
@@ -30,5 +34,18 @@ public class DrinkController {
         Drink drink = new Drink(data);
         repository.save(drink);
         return drink;
+    }
+
+    @PutMapping("/{id}")
+    public Drink updateDrink(@PathVariable Long id, @RequestAttribute DrinkResponseDTO data) {
+        Drink drink = repository.findById(id).get();
+        drink.setData(data);
+        repository.save(drink);
+        return drink;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteDrink(@PathVariable Long id) {
+        repository.deleteById(id);
     }
 }

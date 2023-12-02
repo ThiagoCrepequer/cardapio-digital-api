@@ -36,7 +36,6 @@ public class FoodController {
     @PutMapping("/{id}")
     public Food updateFood(@PathVariable Long id, @RequestBody FoodResponseDTO data) {
         Food foodData = repository.findById(id).orElseThrow();
-        // TODO: melhorar a forma de atualizar
         foodData.setTitle(data.title());
         foodData.setImage(data.image());
         foodData.setPrice(data.price());
