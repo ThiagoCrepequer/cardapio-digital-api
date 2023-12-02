@@ -19,6 +19,10 @@ public class Food {
     private Integer price;
 
     public Food(FoodResponseDTO data) {
+        setData(data);
+    }
+
+    public void setData(FoodResponseDTO data) {
         this.title = data.title();
         this.image = data.image();
         this.price = data.price();

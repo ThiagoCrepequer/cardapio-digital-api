@@ -23,7 +23,7 @@ public class DrinkController {
                 .findAll()
                 .stream()
                 .map(DrinkResponseDTO::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok().body(drinkList);
     }
