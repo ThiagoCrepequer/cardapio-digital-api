@@ -25,7 +25,7 @@ public class Cardapio {
     private String title;
     private String image;
     private Integer price;
-    private String type;
+    private CardapioType type;
     private String description;
     private String size;
 
