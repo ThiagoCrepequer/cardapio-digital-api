@@ -1,0 +1,16 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: db-cardapio
+    environment:
+      POSTGRES_DB: cardapio
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    networks:
+      - network
+networks:
+  network:
+    driver: bridge
