@@ -1,9 +1,16 @@
 package com.example.cardapio.domain.cardapio;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.cardapio.domain.user.User;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -22,6 +29,9 @@ public class Cardapio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "users_id")
+    private User user;
     private String title;
     private String image;
     private Integer price;
@@ -29,11 +39,11 @@ public class Cardapio {
     private String description;
     private String size;
 
-    public Cardapio(CardapioRequestDTO data) {
-        setData(data);
+    public Cardapio(CardapioRequestDTO data, UserDetails userDetails) {
+        setData(data, userDetails);
     }
 
-    public void setData(CardapioRequestDTO data) {
+    public void setData(CardapioRequestDTO data, UserDetails userDetails) {
         this.title = data.title();
         this.image = data.image();
         this.price = data.price();

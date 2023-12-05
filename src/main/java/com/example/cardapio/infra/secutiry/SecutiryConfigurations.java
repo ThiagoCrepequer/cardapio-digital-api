@@ -27,9 +27,8 @@ public class SecutiryConfigurations {
             .sessionManagement(seesion -> seesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/cardapio").permitAll()
-                .requestMatchers("/cardapio").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)

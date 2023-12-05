@@ -7,4 +7,5 @@ import com.example.cardapio.domain.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     UserDetails findByEmail(String email);
+    User findByEmailAndPassword(String email, String password);
 }

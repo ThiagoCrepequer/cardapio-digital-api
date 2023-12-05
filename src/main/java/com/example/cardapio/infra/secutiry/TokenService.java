@@ -21,10 +21,11 @@ public class TokenService {
 
     public String generateToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("asdsad");
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
             String token = JWT.create()
                 .withIssuer("auth-api")
                 .withSubject(user.getEmail())
+                .withClaim("id", user.getId())
                 .withExpiresAt(this.genExpirationDate())
                 .sign(algorithm);
 
@@ -36,13 +37,13 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("asdsad");
+            Algorithm algorithm = Algorithm.HMAC256(this.secret);
             String subject = JWT.require(algorithm)
                 .withIssuer("auth-api")
                 .build()
                 .verify(token)
                 .getSubject();
-
+            
             return subject;
         } catch (JWTVerificationException e) {
             return "";
