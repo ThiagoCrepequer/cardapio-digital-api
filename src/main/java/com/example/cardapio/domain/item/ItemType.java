@@ -1,12 +1,12 @@
-package com.example.cardapio.domain.cardapio;
+package com.example.cardapio.domain.item;
 
-public enum CardapioType {
+public enum ItemType {
     COMIDA("comida"),
     BEBIDA("bebida");
 
     private String tipo;
 
-    CardapioType(String tipo) {
+    ItemType(String tipo) {
         this.tipo = tipo;
     }
 

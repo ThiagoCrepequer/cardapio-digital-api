@@ -3,13 +3,12 @@ package com.example.cardapio.domain.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.cardapio.domain.cardapio.Cardapio;
+import com.example.cardapio.domain.item.Item;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,7 +33,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Cardapio> cardapios = new ArrayList<>();
+    private List<Item> cardapios = new ArrayList<Item>();
     private String email;
     private String password;
     private UserRole role;

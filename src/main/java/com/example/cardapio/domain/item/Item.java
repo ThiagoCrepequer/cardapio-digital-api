@@ -1,8 +1,7 @@
-package com.example.cardapio.domain.cardapio;
-
-import org.springframework.security.core.userdetails.UserDetails;
+package com.example.cardapio.domain.item;
 
 import com.example.cardapio.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,25 +24,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Cardapio {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
+    @JsonIgnore
     private User user;
     private String title;
     private String image;
     private Integer price;
-    private CardapioType type;
+    private ItemType type;
     private String description;
     private String size;
 
-    public Cardapio(CardapioRequestDTO data, UserDetails userDetails) {
-        setData(data, userDetails);
+    public Item(ItemRequestDTO data, User user) {
+        setData(data, user);
     }
 
-    public void setData(CardapioRequestDTO data, UserDetails userDetails) {
+    public void setData(ItemRequestDTO data, User user) {
+        this.user = user;
         this.title = data.title();
         this.image = data.image();
         this.price = data.price();
