@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cardapio.domain.cardapio.CardapioResponseDTO;
+import com.example.cardapio.domain.item.Item;
+import com.example.cardapio.domain.item.ItemRequestDTO;
+import com.example.cardapio.domain.item.ItemResponseDTO;
+import com.example.cardapio.domain.user.User;
 import com.example.cardapio.repositories.CardapioRepository;
+import com.example.cardapio.repositories.UserRepository;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.example.cardapio.domain.cardapio.Cardapio;
-import com.example.cardapio.domain.cardapio.CardapioRequestDTO;
 
 @RestController
 @RequestMapping("/cardapio")
@@ -28,33 +30,33 @@ public class CardapioController {
     private CardapioRepository repository;
 
     @GetMapping
-    public ResponseEntity<List<CardapioResponseDTO>> getAll() {
-        List<CardapioResponseDTO> cardapioList = repository
-                .findAll()
+    public ResponseEntity<List<ItemResponseDTO>> getAll(@AuthenticationPrincipal User user) {
+        List<ItemResponseDTO> cardapioList = repository
+                .findByUserId(user.getId())
                 .stream()
-                .map(CardapioResponseDTO::new)
+                .map(ItemResponseDTO::new)
                 .toList();
 
         return ResponseEntity.ok().body(cardapioList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cardapio> getCardapio(@PathVariable Long id) {
-        Cardapio cardapio = repository.findById(id).orElseThrow();
+    public ResponseEntity<Item> getCardapio(@PathVariable Long id) {
+        Item cardapio = repository.findById(id).orElseThrow();
         return ResponseEntity.ok().body(cardapio);
     }
 
     @PostMapping
-    public ResponseEntity<Cardapio> saveCardapio(@RequestBody CardapioRequestDTO data, @AuthenticationPrincipal UserDetails userDetails) {
-        Cardapio cardapio = new Cardapio(data, userDetails);
+    public ResponseEntity<Item> saveCardapio(@RequestBody ItemRequestDTO data, @AuthenticationPrincipal User user) {
+        Item cardapio = new Item(data, user);
         repository.save(cardapio);
         return ResponseEntity.status(201).body(cardapio);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCardapio(@PathVariable Long id, @RequestBody CardapioRequestDTO data, @AuthenticationPrincipal UserDetails userDetails) {
-        Cardapio cardapio = repository.findById(id).get();
-        cardapio.setData(data, userDetails);
+    public ResponseEntity<Void> updateCardapio(@PathVariable Long id, @RequestBody ItemRequestDTO data, @AuthenticationPrincipal User user) {
+        Item cardapio = repository.findById(id).get();
+        cardapio.setData(data, user);
         repository.save(cardapio);
         return ResponseEntity.noContent().build();
     }
