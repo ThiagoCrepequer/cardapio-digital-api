@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.cardapio.domain.item.Item;
+import com.example.cardapio.domain.qrcode.QrCode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -38,6 +40,8 @@ public class User implements UserDetails {
     private String uuid;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> cardapios = new ArrayList<Item>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private QrCode qrcode;
     private String email;
     private String password;
     private UserRole role;
