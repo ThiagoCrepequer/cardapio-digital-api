@@ -29,7 +29,7 @@ public class QrCodeController {
     private QrCodeRepository repository;
 
     @Autowired
-    private QrCodeService service;
+    private QrCodeService qrCodeService;
 
     @Value("${qrcode.directory}")
     private String qrCodeDirectory;
@@ -43,14 +43,9 @@ public class QrCodeController {
         
         if(qrCode == null) {
             String image_name = UUID.randomUUID().toString() + ".png";
-
-            try {
-                BitMatrix bitMatrix = new MultiFormatWriter().encode(url_base + "?id=" + user.getUuid(), BarcodeFormat.QR_CODE, 250, 250);
-                BufferedImage image = service.createImage(bitMatrix);
-                service.saveImage(image, qrCodeDirectory + "/" + image_name);
-            } catch (WriterException | IOException e) {
-                throw new RuntimeException("Erro ao gerar o QR code", e);
-            }
+            String url = url_base + "?id=" + user.getUuid();
+            
+            qrCodeService.generateQrCode(url, qrCodeDirectory + image_name);
 
             qrCode = new QrCode(user, image_name);
             repository.save(qrCode);

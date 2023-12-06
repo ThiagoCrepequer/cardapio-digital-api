@@ -14,11 +14,25 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 @Service
 public class QrCodeService {
-    public BufferedImage createImage(BitMatrix bitMatrix) {
+
+    public void generateQrCode(String url, String filePath) {
+        try {
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 250, 250);
+            BufferedImage image = createImage(bitMatrix);
+            saveImage(image, filePath);
+        } catch (WriterException | IOException e) {
+            throw new RuntimeException("Erro ao gerar o QR code", e);
+        }
+    }
+
+    private BufferedImage createImage(BitMatrix bitMatrix) {
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -32,13 +46,15 @@ public class QrCodeService {
         return bufferedImage;
     }
 
-    public void saveImage(BufferedImage image, String filePath) throws IOException {
+    private void saveImage(BufferedImage image, String filePath) throws IOException {
         File qrCodeFile = new File(filePath);
         Files.createDirectories(Path.of(qrCodeFile.getParent()));
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", baos);
             Files.write(qrCodeFile.toPath(), baos.toByteArray(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar o QR code", e);
         }
     }
 }
