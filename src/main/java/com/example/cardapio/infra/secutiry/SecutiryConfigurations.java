@@ -26,10 +26,8 @@ public class SecutiryConfigurations {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(seesion -> seesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/cardapio").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.POST, "/cardapio").authenticated()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

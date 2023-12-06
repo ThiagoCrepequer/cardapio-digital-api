@@ -43,8 +43,8 @@ public class QrCode {
         this.uuid = java.util.UUID.randomUUID().toString();
     }
 
-    public QrCode(User user) {
+    public QrCode(User user, String image_path) {
         this.user = user;
-        this.url = "https://cardapio-qr-code.herokuapp.com/" + user.getUuid();
+        this.url = "/qrcode/" + image_path;
     }
 }
