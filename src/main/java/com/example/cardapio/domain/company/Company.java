@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,11 @@ public class Company {
     private String state;
     private String cep;
     private String country;
+
+    @PrePersist
+    private void prePersist() {
+        this.uuid = java.util.UUID.randomUUID().toString();
+    }
 
     public Company(CompanyRequestDTO data) {
         setData(data);

@@ -49,7 +49,6 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCompany(Long id, CompanyRequestDTO data) {
-
         Company company = repository.findById(id).get();
         company.setData(data);
         repository.save(company);

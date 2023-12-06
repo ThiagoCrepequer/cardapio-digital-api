@@ -45,6 +45,7 @@ public class QrCode {
     }
 
     public QrCode(User user, String image_path) {
+        this.company = user.getCompany();
         this.url = "/qrcode/" + image_path;
     }
 }
