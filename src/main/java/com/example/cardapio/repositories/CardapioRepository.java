@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.cardapio.domain.item.Item;
 
 public interface CardapioRepository extends JpaRepository<Item, Long> {
-    List<Item> findByUserId(Long userId);
+    List<Item> findByUserUuid(String userUuid);
 } 

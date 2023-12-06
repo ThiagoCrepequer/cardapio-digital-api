@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cardapio.domain.item.Item;
@@ -28,13 +29,12 @@ public class CardapioController {
     private CardapioRepository repository;
 
     @GetMapping
-    public ResponseEntity<List<ItemResponseDTO>> getAll(@AuthenticationPrincipal User user) {
+    public ResponseEntity<List<ItemResponseDTO>> getAll(@RequestParam(required = false) String id, @AuthenticationPrincipal User user) {
         List<ItemResponseDTO> cardapioList = repository
-                .findByUserId(user.getId())
+                .findByUserUuid(user != null ? user.getUuid() : id)
                 .stream()
                 .map(ItemResponseDTO::new)
                 .toList();
-
         return ResponseEntity.ok().body(cardapioList);
     }
 

@@ -11,11 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.cardapio.domain.item.Item;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -32,11 +34,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
+    private String uuid;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> cardapios = new ArrayList<Item>();
     private String email;
     private String password;
     private UserRole role;
+
+    @PrePersist
+    private void prePersist() {
+        this.uuid = java.util.UUID.randomUUID().toString();
+    }
 
     public User(String email, String password, UserRole role) {
         this.email = email;
