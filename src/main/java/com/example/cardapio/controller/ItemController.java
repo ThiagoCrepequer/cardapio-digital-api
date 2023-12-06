@@ -29,11 +29,13 @@ public class ItemController {
     private ItemRepository repository;
 
     @GetMapping
-    public ResponseEntity<List<ItemResponseDTO>> getAll(@RequestParam(required = false) String id, @AuthenticationPrincipal User user) {
-        String company_uuid = user.getCompany().getUuid();
+    public ResponseEntity<List<ItemResponseDTO>> getAll(@RequestParam(required = false) String id, @AuthenticationPrincipal User user) {   
+        if (id == null && user == null) {
+            return ResponseEntity.badRequest().build();
+        }
         
         List<ItemResponseDTO> cardapioList = repository
-                .findByCompanyUuid(user != null ? company_uuid : id)
+                .findByCompanyUuid(user != null ? user.getCompany().getUuid() : id)
                 .stream()
                 .map(ItemResponseDTO::new)
                 .toList();
