@@ -15,7 +15,7 @@ import com.example.cardapio.domain.item.Item;
 import com.example.cardapio.domain.item.ItemRequestDTO;
 import com.example.cardapio.domain.item.ItemResponseDTO;
 import com.example.cardapio.domain.user.User;
-import com.example.cardapio.repositories.CardapioRepository;
+import com.example.cardapio.repositories.ItemRepository;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +24,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/cardapio")
-public class CardapioController {
+public class ItemController {
     @Autowired
-    private CardapioRepository repository;
+    private ItemRepository repository;
 
     @GetMapping
     public ResponseEntity<List<ItemResponseDTO>> getAll(@RequestParam(required = false) String id, @AuthenticationPrincipal User user) {
+        String company_uuid = user.getCompany().getUuid();
+        
         List<ItemResponseDTO> cardapioList = repository
-                .findByUserUuid(user != null ? user.getUuid() : id)
+                .findByCompanyUuid(user != null ? company_uuid : id)
                 .stream()
                 .map(ItemResponseDTO::new)
                 .toList();

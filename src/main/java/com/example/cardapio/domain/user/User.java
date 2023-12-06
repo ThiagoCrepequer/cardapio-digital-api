@@ -8,27 +8,32 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.cardapio.domain.company.Company;
 import com.example.cardapio.domain.item.Item;
 import com.example.cardapio.domain.qrcode.QrCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table(name = "users")
 @Entity(name = "users")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -38,10 +43,10 @@ public class User implements UserDetails {
     private Long id;
     @Column(unique = true)
     private String uuid;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Item> cardapios = new ArrayList<Item>();
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private QrCode qrcode;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_id")
+    @JsonIgnore
+    private Company company;
     private String email;
     private String password;
     private UserRole role;
@@ -51,7 +56,8 @@ public class User implements UserDetails {
         this.uuid = java.util.UUID.randomUUID().toString();
     }
 
-    public User(String email, String password, UserRole role) {
+    public User(String email, String password, UserRole role, Company company) {
+        this.company = company;
         this.email = email;
         this.password = password;
         this.role = role;

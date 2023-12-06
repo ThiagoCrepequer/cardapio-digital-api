@@ -1,5 +1,6 @@
 package com.example.cardapio.domain.item;
 
+import com.example.cardapio.domain.company.Company;
 import com.example.cardapio.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,9 +30,9 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "company_id")
     @JsonIgnore
-    private User user;
+    private Company company;
     private String title;
     private String image;
     private Integer price;
@@ -44,7 +45,7 @@ public class Item {
     }
 
     public void setData(ItemRequestDTO data, User user) {
-        this.user = user;
+        this.company = user.getCompany();
         this.title = data.title();
         this.image = data.image();
         this.price = data.price();

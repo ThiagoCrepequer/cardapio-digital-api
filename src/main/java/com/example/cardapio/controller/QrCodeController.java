@@ -33,7 +33,7 @@ public class QrCodeController {
 
     @GetMapping
     public ResponseEntity<QrCodeResponseDTO> generate(@AuthenticationPrincipal User user) {
-        QrCode qrCode = repository.findByUserId(user.getId());
+        QrCode qrCode = repository.findByCompanyUuid(user.getCompany().getUuid());
         
         if(qrCode == null) {
             String image_name = UUID.randomUUID().toString() + ".png";

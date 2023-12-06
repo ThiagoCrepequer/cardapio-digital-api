@@ -1,5 +1,6 @@
 package com.example.cardapio.domain.qrcode;
 
+import com.example.cardapio.domain.company.Company;
 import com.example.cardapio.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,9 +35,9 @@ public class QrCode {
     private String uuid;
     private String url;
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "company_id")
     @JsonIgnore
-    private User user;
+    private Company company;
 
     @PrePersist
     private void prePersist() {
@@ -44,7 +45,6 @@ public class QrCode {
     }
 
     public QrCode(User user, String image_path) {
-        this.user = user;
         this.url = "/qrcode/" + image_path;
     }
 }

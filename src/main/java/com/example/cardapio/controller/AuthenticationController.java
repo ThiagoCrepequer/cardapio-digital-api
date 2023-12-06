@@ -1,20 +1,25 @@
 package com.example.cardapio.controller;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.cardapio.domain.company.Company;
 import com.example.cardapio.domain.user.AuthenticationRequestDTO;
 import com.example.cardapio.domain.user.LoginResponseDTO;
 import com.example.cardapio.domain.user.RegisterDTO;
 import com.example.cardapio.domain.user.User;
 import com.example.cardapio.infra.secutiry.TokenService;
+import com.example.cardapio.repositories.CompanyRepository;
 import com.example.cardapio.repositories.UserRepository;
 
 import jakarta.validation.Valid;
@@ -27,7 +32,10 @@ public class AuthenticationController {
     @Autowired
     private UserRepository repository;
     @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
     private TokenService tokenService;
+    
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO data) {
@@ -46,7 +54,9 @@ public class AuthenticationController {
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role());
+        Company company = companyRepository.findByUuid(data.company_id());
+
+        User newUser = new User(data.email(), encryptedPassword, data.role(), company);
 
         this.repository.save(newUser);
 
