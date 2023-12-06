@@ -1,7 +1,5 @@
 package com.example.cardapio.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +15,6 @@ import com.example.cardapio.domain.qrcode.QrCodeResponseDTO;
 import com.example.cardapio.domain.user.User;
 import com.example.cardapio.repositories.QrCodeRepository;
 import com.example.cardapio.services.QrCodeService;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 
 @RestController
 @RequestMapping("/qrcode")
