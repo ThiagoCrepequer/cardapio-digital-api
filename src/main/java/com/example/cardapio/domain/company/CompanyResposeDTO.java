@@ -10,7 +10,8 @@ public record CompanyResposeDTO(
     String city, 
     String state, 
     String cep, 
-    String country
+    String country,
+    String cnpj
 ) {
     public CompanyResposeDTO(Company company) {
         this(
@@ -23,7 +24,8 @@ public record CompanyResposeDTO(
             company.getCity(), 
             company.getState(), 
             company.getCep(), 
-            company.getCountry()
+            company.getCountry(),
+            company.getCnpj()
         );
     }    
 }

@@ -3,9 +3,12 @@ package com.example.cardapio.domain.company;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CNPJ;
+
 import com.example.cardapio.domain.item.Item;
 import com.example.cardapio.domain.qrcode.QrCode;
 import com.example.cardapio.domain.user.User;
+import com.example.cardapio.validator.telefone.Telefone;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +20,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -50,8 +56,9 @@ public class Company {
     private String name;
     private String url_logo;
     private String description;
-    private String phone;
+    @Telefone private String phone;
     @Email private String email;
+    @CNPJ private String cnpj;
     private String address;
     private String city;
     private String state;
@@ -78,5 +85,6 @@ public class Company {
         this.state = data.state();
         this.cep = data.cep();
         this.country = data.country();
+        this.cnpj = data.cnpj();
     }
 }
