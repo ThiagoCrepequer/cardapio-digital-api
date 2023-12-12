@@ -34,14 +34,15 @@ public class AuthenticationController {
     private CompanyRepository companyRepository;
     @Autowired
     private TokenService tokenService;
-    
+
+    private HttpHeaders headers = new HttpHeaders();
+
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO data) {
         var token = this.getToken(data);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        return new ResponseEntity<>(null, headers, HttpStatus.OK);
+        this.headers.add("Authorization", "Bearer " + token);
+        return new ResponseEntity<>(null, this.headers, HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -55,9 +56,11 @@ public class AuthenticationController {
         User newUser = new User(data.email(), encryptedPassword, data.role(), company);
         this.repository.save(newUser);
 
-        var token = this.getToken(new AuthenticationRequestDTO(data.email(), data.password()));
+        var auth = new AuthenticationRequestDTO(data.email(), data.password());
+        var token = this.getToken(auth);
 
-        return ResponseEntity.status(201).body(new LoginResponseDTO(token));
+        this.headers.add("Authorization", "Bearer " + token);
+        return new ResponseEntity<>(null, this.headers, HttpStatus.CREATED);
     }
 
     private String getToken(AuthenticationRequestDTO data) {
