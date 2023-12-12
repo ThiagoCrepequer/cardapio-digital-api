@@ -26,9 +26,9 @@ public class CompanyController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/{uuid}")
-    public Company getCompany(String uuid) {
-        Company company = repository.findByUuid(uuid);
+    @GetMapping("/{id}")
+    public Company getCompany(String id) {
+        Company company = repository.findByUuid(id);
         return company;
     }
 
