@@ -1,6 +1,22 @@
 version: '3'
 services:
-  postgres:
+  spring:
+    image: crepquer/cardapio:latest
+    container_name: spring-cardapio
+    environment:
+      - APP_NAME=cardapio
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/cardapio
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - URL_BASE=http://localhost:8081
+      - URL_BASE_CLIENT=http://localhost:5173
+    ports:
+      - "8081:8081"
+    networks:
+      - network
+    depends_on:
+      - db
+  db:
     image: postgres:latest
     container_name: db-cardapio
     environment:
