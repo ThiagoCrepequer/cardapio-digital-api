@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -18,8 +19,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "cardapio")
-@Entity(name = "cardapio")
+@Table(name = "item")
+@Entity(name = "item")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,6 +30,8 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String uuid;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     @JsonIgnore
@@ -39,6 +42,11 @@ public class Item {
     private ItemType type;
     private String description;
     private String size;
+
+    @PrePersist
+    private void prePersist() {
+        this.uuid = java.util.UUID.randomUUID().toString();
+    }
 
     public Item(ItemRequestDTO data, User user) {
         setData(data, user);
