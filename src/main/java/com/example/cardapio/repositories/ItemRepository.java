@@ -8,4 +8,6 @@ import com.example.cardapio.domain.item.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByCompanyUuid(String companyUuid);
+    Item findByUuid(String uuid);
+    void deleteByUuid(String uuid);
 } 
