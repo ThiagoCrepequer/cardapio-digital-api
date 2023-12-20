@@ -42,9 +42,9 @@ public class ItemController {
         return ResponseEntity.ok().body(cardapioList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Item> getCardapio(@PathVariable Long id) {
-        Item cardapio = repository.findById(id).orElseThrow();
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Item> getCardapio(@PathVariable String uuid) {
+        Item cardapio = repository.findByUuid(uuid);
         return ResponseEntity.ok().body(cardapio);
     }
 
@@ -55,17 +55,18 @@ public class ItemController {
         return ResponseEntity.status(201).body(cardapio);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCardapio(@PathVariable Long id, @RequestBody ItemRequestDTO data, @AuthenticationPrincipal User user) {
-        Item cardapio = repository.findById(id).get();
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Void> updateCardapio(@PathVariable String uuid, @RequestBody ItemRequestDTO data, @AuthenticationPrincipal User user) {
+        Item cardapio = repository.findByUuid(uuid);
         cardapio.setData(data, user);
         repository.save(cardapio);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCardapio(@PathVariable Long id) {
-        repository.deleteById(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteCardapio(@PathVariable String uuid) {
+        repository.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
     }
 }
+    
