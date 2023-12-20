@@ -17,6 +17,7 @@ import com.example.cardapio.domain.user.AuthenticationRequestDTO;
 import com.example.cardapio.domain.user.LoginResponseDTO;
 import com.example.cardapio.domain.user.RegisterDTO;
 import com.example.cardapio.domain.user.User;
+import com.example.cardapio.exceptions.UserNotFoundException;
 import com.example.cardapio.infra.secutiry.TokenService;
 import com.example.cardapio.repositories.CompanyRepository;
 import com.example.cardapio.repositories.UserRepository;
@@ -43,6 +44,7 @@ public class AuthenticationController {
         var token = this.getToken(data);
         this.headers.add("Authorization", "Bearer " + token);
         return new ResponseEntity<>(null, this.headers, HttpStatus.OK);
+        
     }
 
     @PostMapping("/register")
@@ -64,9 +66,18 @@ public class AuthenticationController {
     }
 
     private String getToken(AuthenticationRequestDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-        return tokenService.generateToken((User) auth.getPrincipal());
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
+            
+            if (auth == null || !auth.isAuthenticated()) {
+                throw new UserNotFoundException("Usuário não encontrado ou credenciais inválidas");
+            }
+
+            return tokenService.generateToken((User) auth.getPrincipal());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }
 
